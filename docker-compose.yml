@@ -1,0 +1,35 @@
+version: '3'
+
+networks:
+  food-delivery: 
+
+services:
+  food-delivery-ui:
+    image: bitnami/node:latest
+    volumes:
+      - ./food-delivery-ui:/app
+    command: ["npm", "start"]
+    networks:
+      - food-delivery
+    ports:
+      - 3001:3000
+
+  ordering-service:
+    image: bitnami/laravel:latest
+    volumes:
+      - ./ordering-service:/app
+    networks:
+      - food-delivery
+    ports:
+      - 8000:8000
+  
+  order-fulfillment-service:
+    image: bitnami/node:latest
+    volumes:
+      - ./order-fulfillment-service:/app
+    command: ["npm", "start"]
+    networks:
+      - food-delivery
+    ports:
+      - 3000:3000
+
